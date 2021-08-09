@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build --prod --base-href=/cmmi/",
+    "start": "node server.js",
+    "build": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
@@ -26,6 +26,7 @@
     "angularjs": "0.0.1",
     "apexcharts": "^3.26.3",
     "bootstrap": "^4.6.0",
+    "express": "^4.17.1",
     "file-saver": "^2.0.5",
     "ng-apexcharts": "^1.5.10",
     "ngx-material-timepicker": "^5.5.3",
