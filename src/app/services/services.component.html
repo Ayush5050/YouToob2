@@ -1,0 +1,223 @@
+<div class="row" >
+
+  <div class="col-12 col-sm-12 col-md-5 col-lg-5 col-xl-5" style="padding: 20px; ">
+    <!-- <div class="text-center col" >
+      <h1 class="h4">Feature : Services</h1>
+      <div class="card bg-light mb-3 text-center">
+    </div> -->
+    <div class="text-center shadow-grid main-filter-body main-border-radius" style="margin: 20px">
+      <div class="card-body" *ngIf="songSelected">
+        <h5 class="card-title text-primary">{{ songSelected.artist }}</h5>
+        <h6 class="card-title text-info">{{ songSelected.title }}</h6>
+        <h6 class="card-title text-secondary">{{ songSelected.top }}</h6>
+      </div>
+      <div class="card-body" *ngIf="!songSelected">
+        <div class="alert alert-danger" role="alert" style="margin-bottom: 0%;">
+          Select a song on the list to see the clip<br>
+          <i class="fab fa-youtube fa-2x text-danger"></i>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="songSelected" class="outline">
+    <div class="embed-responsive embed-responsive-16by9">
+      <iframe class="embed-responsive-item" [src]="('https://www.youtube.com/embed/' + songSelected.link) | safe"
+        allowfullscreen></iframe>
+    </div>
+  </div>
+  </div>
+
+  <div class="col-12 col-sm-12 col-md-7 col-lg-7 col-xl-7">
+    <div class="row shadow-grid main-filter-body main-border-radius" style="padding: 10px; margin: 20px">
+      <div class="header-box"> 
+          <mat-form-field appearance="outline" style="text-align: center;">
+            <mat-select [(ngModel)]="selectedOption">
+              <mat-option
+                *ngFor="let option of playlist"
+                [value]="option.id"
+                (click)="toggleSelected(option.id)"
+                >{{ option.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        <mat-form-field appearance="outline" >
+          <mat-label>Search by Artist, Title...</mat-label>
+          <input
+            matInput
+            placeholder="Type search text here"
+            type="text"
+            id="searchText"
+            [(ngModel)]="searchText"
+          />
+        </mat-form-field>
+      </div>
+    </div>
+  
+    <!-- <div class="form-group">
+      <label class="text-primary font-weight-bold" for="exampleFormControlSelect1">Classement Mégafusion
+        (Téléchargements + Streaming)</label>
+      <select class="form-control text-primary font-weight-bold" id="exampleFormControlSelect1" (change)="onChange($event)">
+        <option value="1">2018</option>
+        <option value="2">2017</option>
+        <option value="3">2016</option>
+        <option value="4">2015</option>
+      </select>
+    </div> -->
+    <div class="row shadow-grid main-border-radius" style="padding: 10px; margin: 20px ; margin-bottom: 0" >
+    <table style="border:0px" class="table table-hover table-striped table-bordered table-responsive-md table-sm">
+      <thead>
+        <tr>
+          <!-- <th class="text-secondary" style="text-align:center;border:0px;">Clip</th> -->
+          <th class="text-secondary" style="text-align:center;border:0px;">Top</th>
+          <th class="text-info" style="cursor: pointer;text-align:center;border:0px;">Title</th>
+          <th class="text-primary" style="text-align:center;border:0px;">Artist</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let song of songs" style="background-color: rgba(0,0,0,0);border:0px;" class="table-{{ song.class }}" (click)="select(song)">
+          <!-- <td class="text-secondary" style="cursor: pointer;text-align:center;border:0px;"><i
+              class="fab fa-youtube text-danger"></i></td> -->
+          <td class="text-secondary" style="cursor: pointer;text-align:center;border:0px;">{{ song.top }}</td>
+          <td class="text-info" style="cursor: pointer;text-align:center;border:0px;">{{ song.title }}</td>
+          <td class="text-primary" style="cursor: pointer;text-align:center;border:0px;">{{ song.artist }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <mat-paginator
+    [length]="row_length"
+
+    [pageSize]="10"
+    [pageSizeOptions]="[5, 10, 25, 100]"
+    showFirstLastButtons
+    id="paginator">
+    </mat-paginator>
+    <!-- (page)="onPaginateChange($event)" -->
+  </div>
+    <!-- <app-grid-inventory                
+            [data]="darGridData$|async"
+            [showAction]="false"
+            >  
+          </app-grid-inventory> -->
+
+          <!-- <div class="row shadow-grid main-filter-body main-border-radius gl-padding gl-margin" *ngIf="showHeader">
+            <div class="table-filter-box">
+              <div class="left-filter-box">
+                <mat-form-field appearance="fill">
+                  <mat-select [(ngModel)]="selectedOption">
+                    <mat-option
+                      *ngFor="let option of partnersTypeOptions"
+                      [value]="option"
+                      (click)="toggleSelected(option)"
+                      >{{ option }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Search by keyword, city, state</mat-label>
+                <input
+                  matInput
+                  placeholder="Type search text here"
+                  type="text"
+                  id="searchText"
+                  [(ngModel)]="searchText"
+                />
+              </mat-form-field>
+            </div>
+          </div>
+          </div>
+          <div class="row shadow-grid main-border-radius gl-padding gl-margin">
+            
+            <div
+            class="no-data"
+            *ngIf="
+              (data == null || (rowslice != null && rowslice.length == 0)) &&
+              searchText == null
+            "
+          >
+            <p>No 1 Record Found</p>
+          </div>
+          
+          <div
+            class="search_empty"
+            *ngIf="(rowslice | filter: searchText).length == 0 && searchText != null"
+          >
+            <p>No 2 Record Found</p>
+          </div>
+            <div *ngIf="data != null && rowslice?.length > 0" class="hgt width-100">
+              <div class="all-lst">
+                <section class="lst-hdr">
+                  <div class="row">
+                    <div
+                      class="flx-cl"
+                      *ngFor="let header of data.header"
+                      [ngClass]="{ 'col-reszie': (header.DisplayHead | gridColumnWidth) }"
+                    >
+                      <span class="hd-nm" >
+                        {{ header.DisplayHead }}
+                        <i
+                          class="material-icons"
+                          *ngIf="selectedHeader == header.FieldName && !isHeaderSort"
+                        >
+                          arrow_drop_up
+                        </i>
+                        <i
+                          class="material-icons"
+                          *ngIf="selectedHeader == header.FieldName && isHeaderSort"
+                        >
+                          arrow_drop_down
+                        </i>
+                        <i
+                          class="material-icons dflt"
+                          *ngIf="selectedHeader != header.FieldName"
+                        >
+                          arrow_drop_up
+                        </i>
+                      </span>
+                    </div>
+                  </div>
+                </section>
+                <section class="lst-app cus_scrl full-height">
+                  <div
+                    class="row modernrow"
+                    *ngFor="let row of rowslice | filter: searchText"
+                    (click)="select(row)"
+                  >
+                    <div
+                      class="flx-cl"
+                      *ngFor="let property of data.header | keyvalue: originalOrder"
+                      [ngClass]="{
+                        'col-reszie': (property.value['DisplayHead'] | gridColumnWidth)
+                      }"
+                    >
+                      <div
+                        title="{{
+                          property.value['Type'] == 'phone'
+                            ? (row[property.value['FieldName']] | phone: 'US')
+                            : property.value['Type'] == 'email'
+                            ? row[property.value['FieldName']]
+                            : (row[property.value['FieldName']] | typeFilter)
+                            ? row[property.value['FieldName']]
+                            : (row[property.value['FieldName']] | titlecase)
+                        }}"
+                        *ngIf="property.value['Type'] == 'label'"
+                      >
+                      {{ row[property.value["FieldName"]] }}
+                        <ng-template #naView> N/A </ng-template>
+                      </div>
+                    </div>                    
+                  </div>
+                </section>
+                <div class="clearfix"></div>
+                <mat-paginator
+                  [length]="row_length"
+                  (page)="onPaginateChange($event)"
+                  [pageSize]="10"
+                  [pageSizeOptions]="[5, 10, 25, 100]"
+                  showFirstLastButtons
+                  id="paginator"
+                >
+                </mat-paginator>
+              </div>
+            </div>
+          </div> -->
+  </div>
+</div>

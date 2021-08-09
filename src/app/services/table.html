@@ -1,0 +1,144 @@
+<div class="row shadow-grid main-filter-body main-border-radius gl-padding gl-margin" *ngIf="showHeader">
+    <div class="table-filter-box">
+      <div class="left-filter-box">
+        <mat-form-field appearance="fill">
+          <mat-select [(ngModel)]="selectedOption">
+            <mat-option
+              *ngFor="let option of partnersTypeOptions"
+              [value]="option"
+              (click)="toggleSelected(option)"
+              >{{ option }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Search by keyword, city, state</mat-label>
+        <input
+          matInput
+          placeholder="Type search text here"
+          type="text"
+          id="searchText"
+          [(ngModel)]="searchText"
+        />
+      </mat-form-field>
+    </div>
+  </div>
+    <div class="sbx">  
+      <span class="icn" *ngIf="isSortIconVis">
+        <i
+          class="material-icons reflect sort_icn pos-abs rtp"
+          *ngIf="isSort"
+          (click)="sortData(false)"
+          title="{{ isMgmt ? 'Sort A-Z' : 'Sort Ascending by Request Date' }}"
+          >sort</i
+        >
+        <i
+          class="material-icons sort_icn pos-abs rtp"
+          *ngIf="!isSort"
+          (click)="sortData(true)"
+          title="{{
+            isMgmt ? 'Sort Z-A' : 'Sort Descending by Request Date'
+          }}"
+          >sort</i
+        >
+      </span>
+    </div>
+  </div>
+  <div class="row shadow-grid main-border-radius gl-padding gl-margin">
+    
+    <div
+    class="no-data"
+    *ngIf="
+      (data == null || (rowslice != null && rowslice.length == 0)) &&
+      searchText == null
+    "
+  >
+    <p>No Record Found</p>
+  </div>
+  
+  <div
+    class="search_empty"
+    *ngIf="(rowslice | filter: searchText).length == 0 && searchText != null"
+  >
+    <p>No Record Found</p>
+  </div>
+    <div *ngIf="data != null && rowslice?.length > 0" class="hgt width-100">
+      <div class="all-lst">
+        <section class="lst-hdr">
+          <div class="row">
+            <div
+              class="flx-cl"
+              *ngFor="let header of data.header"
+              [ngClass]="{ 'col-reszie': (header.DisplayHead | gridColumnWidth) }"
+            >
+              <span class="hd-nm" (click)="SortByColumn(header)">
+                {{ header.DisplayHead }}
+                <i
+                  class="material-icons"
+                  *ngIf="selectedHeader == header.FieldName && !isHeaderSort"
+                >
+                  arrow_drop_up
+                </i>
+                <i
+                  class="material-icons"
+                  *ngIf="selectedHeader == header.FieldName && isHeaderSort"
+                >
+                  arrow_drop_down
+                </i>
+                <!-- default Arraw-->
+                <i
+                  class="material-icons dflt"
+                  *ngIf="selectedHeader != header.FieldName"
+                >
+                  arrow_drop_up
+                </i>
+              </span>
+            </div>
+          </div>
+        </section>
+        <section class="lst-app cus_scrl full-height">
+          <div
+            class="row modernrow"
+            *ngFor="let row of rowslice | filter: searchText"
+          >
+            <div
+              class="flx-cl"
+              *ngFor="let property of data.header | keyvalue: originalOrder"
+              [ngClass]="{
+                'col-reszie': (property.value['DisplayHead'] | gridColumnWidth)
+              }"
+            >
+              <span
+                title="{{
+                  property.value['Type'] == 'phone'
+                    ? (row[property.value['FieldName']] | phone: 'US')
+                    : property.value['Type'] == 'email'
+                    ? row[property.value['FieldName']]
+                    : (row[property.value['FieldName']] | typeFilter)
+                    ? row[property.value['FieldName']]
+                    : (row[property.value['FieldName']] | titlecase)
+                }}"
+                *ngIf="property.value['Type'] == 'label'"
+              >
+                <ng-template #naView> N/A </ng-template>
+              </span>
+            </div>
+  
+            <!--Edit/ Delete/ Archive button-->
+            
+          </div>
+        </section>
+        <div class="clearfix"></div>
+        <mat-paginator
+          [length]="row_length"
+          (page)="onPaginateChange($event)"
+          [pageSize]="10"
+          [pageSizeOptions]="[5, 10, 25, 100]"
+          showFirstLastButtons
+          id="paginator"
+        >
+        </mat-paginator>
+      </div>
+    </div>
+  </div>
+  

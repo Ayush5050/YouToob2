@@ -1,0 +1,28 @@
+@import "./scss/theme.scss";
+.fl-wd {
+  box-shadow: rgba(110, 110, 110, 0.5) 0px 0px 2px;
+}
+.column {
+  float: left;
+}
+
+.left {
+  width: 17%;
+}
+
+.right {
+  width: 83%;
+}
+
+i.bars {
+  background: #7f63f4;
+  color: #fff;
+  padding: 5px;
+  border-radius: 0px 4px 4px 0px;
+  position: fixed;
+  left: 16.2%;
+  box-shadow: black 2px 0px 2px;
+  cursor: pointer;
+  top: 12px;
+  z-index: 99;
+}

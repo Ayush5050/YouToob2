@@ -1,0 +1,8 @@
+@import "../../../styles.scss";
+.right-nav{
+    height:  $height-100;
+    @include main-box-shadow(0, 10px, 15px, rgba(0,0,0,0.2));
+    background-color: $base-color;
+    width: $width-100;
+    
+}

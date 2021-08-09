@@ -1,0 +1,5 @@
+<ul class="breadCrumb-ul">
+    <li><i class="material-icons home" routerLink="/">home</i></li>
+    <li class="active">{{currentPage}}</li>
+    <li *ngFor="let nav of breadCrumbList" [ngClass]="{'active':nav.isRoute}">{{nav.name}}</li>
+</ul>

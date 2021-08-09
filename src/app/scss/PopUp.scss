@@ -1,0 +1,64 @@
+.popup.show {
+  position: absolute;
+  top: 4px;
+  background: #F9F9F9;
+  right: 0;
+  left: 0;
+  padding: 20px;
+}
+#main-box{
+ 
+  .text-white {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  h1 {
+    color: #555;
+    padding: 0;
+    margin: 0;
+}
+  h3 {
+    color: #ff0000;
+    font-size: 14px;
+    text-align: right;
+}
+}
+.mat-form-field {
+  width: 100%;
+}
+.mat-focus-indicator.mat-button-base.mat-primary {
+  background: #0076bb;
+  padding: 9px 38px;
+  line-height: 1.5;
+}
+.mat-button-disabled.mat-focus-indicator.mat-button-base{
+  background: #eeeeee;
+}
+.white-light{
+  background: #fff;
+  box-shadow: 0 0 6px rgb(0 0 0 / 20%);
+  padding: 20px;
+  border-radius: 8px;
+  margin: 20px 0;
+}
+mat-toolbar.mat-toolbar {
+  margin: -20px 0 0 -20px;
+  background: #f9f9f9;
+  border-radius: 8px 0 0 0;
+  .acord {
+    display: flex;
+    gap: 20px;
+    span {
+      padding: 12px 38px;
+      font-size: 16px;
+      box-shadow: 0 0 6px rgb(0 0 0 / 20%);
+      border-radius: 8px 8px 0 0;
+      cursor: pointer;
+    }
+  }
+}
+h3, h2 {
+  font-size: 20px;
+  margin: 0 0 22px 0;
+}
+}

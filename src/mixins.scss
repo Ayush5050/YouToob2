@@ -1,0 +1,16 @@
+@mixin main-border-radius($value){
+    -webkit-border-radius: $value;
+    -moz-border-radius: $value;
+    border-radius: $value;
+}
+@mixin main-box-shadow($top, $left, $blur, $color){
+    -webkit-box-shadow: $top $left $blur $color;
+    -moz-box-shadow: $top $left $blur $color;
+    box-shadow: $top $left $blur $color;
+}
+@mixin transform30($transforms) {
+	-webkit-transform: $transforms;
+	-moz-transform: $transforms;
+	-ms-transform: $transforms;
+	transform: $transforms;
+}

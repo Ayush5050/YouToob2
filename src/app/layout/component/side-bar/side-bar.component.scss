@@ -1,0 +1,124 @@
+@import '../../../scss/theme.scss';
+.main {
+    height: 100%;
+    overflow-x: hidden;
+    background: $sidebar-blue;
+    color: $sidebar-fontcolor;
+    font-size: $font-size - .35;
+    letter-spacing: .10rem;
+    font-weight: 500;
+    padding-top: 57.6px;
+    position: fixed;
+    width: 17%;
+    
+
+.hdr-wrap {
+    position: fixed;
+    top: 0px;
+    height: 57.6px;
+    background: $header-blue;
+    width: 17%;
+    color:$white;
+    z-index: 9;
+    height: 63.5px;
+
+span.logo {
+    position: relative;
+    display: inline-block;
+    padding: 5px;
+    background: #fff;
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+    margin-left: 35px;
+    margin-right: 5px;
+    margin-top: 7px;
+    text-align: center;
+    cursor: pointer;
+    img{
+        max-width: 30px;
+        padding-top: 2px;
+    }
+}
+span,a,img{
+    outline: none;
+}
+span.ap-nm {
+    display: inline-block;
+    font-size: 1.5rem;
+    letter-spacing: .5px;
+    font-weight: 600;
+    cursor: pointer;
+    vertical-align: middle;
+    text-align:center;
+    padding-left: 36%;
+    padding-top: 20px;
+    
+}
+}
+.list-item {
+    padding: 1rem 0px;
+    border-bottom: 1px solid #446585;
+    background: #003366;
+    h4.sec-nm {
+    display: inline-block;
+    font-weight: 400;
+    font-size: 1.3rem;
+    margin: 20px 50px;
+    margin-top: 5px;
+    color: darken( $sidebar-fontcolor, 10% );
+    }
+    ul.side-list {
+        list-style: none;
+        padding-left: 0px;
+        margin: 0px;
+        li{
+            outline: none;
+        }
+        .item {
+            padding: 7px 20px;
+            margin-top: 10px;
+            cursor: pointer;
+            position: relative;
+            &::before{
+                content: '';
+                display: none;
+            }
+            &:hover,&.act{
+                background-color: $active-color;
+                color: $white;
+                &::before{
+                    content: '';
+                    display: block;
+                    position: absolute;
+                    width: 3px;
+                    height: 100%;
+                    background: $header-blue;
+                    left: 0px;
+                    top:0px;
+                }
+            }
+            i.material-icons.icons-hem {
+                color: #b3b3b3;
+                font-size: 1rem;
+                display: inline-block;
+                vertical-align: middle;
+                margin-right: 10px;
+            }
+        }
+    }
+}
+}
+span.categ {
+    color: #b3b3b3;
+    font-size: 1rem;
+    //margin-bottom: 10%;
+    font-weight: 100;
+    outline: none;
+}
+::ng-deep .mat-expansion-panel-body{
+    padding: 0 !important;
+}
+::ng-deep .mat-expansion-panel-header-title{
+    margin-top: 20px;
+}

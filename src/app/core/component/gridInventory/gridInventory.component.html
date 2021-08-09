@@ -1,0 +1,660 @@
+<div class="row shadow-grid main-filter-body main-border-radius gl-padding gl-margin" *ngIf="showHeader">
+  <div class="table-filter-box">
+    <div class="left-filter-box">
+      <mat-form-field appearance="fill">
+        <mat-select [(ngModel)]="selectedOption">
+          <mat-option
+            *ngFor="let option of partnersTypeOptions"
+            [value]="option"
+            (click)="toggleSelected(option)"
+            >{{ option }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Search by keyword, city, state</mat-label>
+      <input
+        matInput
+        placeholder="Type search text here"
+        type="text"
+        id="searchText"
+        [(ngModel)]="searchText"
+      />
+    </mat-form-field>
+  </div>
+  <div class="right-filter-box">
+    <a href="JavaScript:void(0);" matRipple (click)="createForm()" matTooltip="Add Account" id="asd" class="add-btn"><i class="material-icons">add</i> Add</a>
+    <a href="JavaScript:void(0);" class="simple-btn"><i class="material-icons">file_download</i> Import</a>
+    <a href="JavaScript:void(0);" class="simple-btn"><i class="material-icons">file_upload</i> Export</a>
+    <a href="JavaScript:void(0);" class="blue-btn"><i class="material-icons">settings</i> Column Setting</a>
+  </div>
+    <!-- <div class="p-input-icon-left" class="menuSearch">
+    <i class="pi pi-search"></i>
+    <input type="text" (keyup)="applyFilter($event)" [(ngModel)]="globalFilterInput"
+        placeholder="Search" />
+  </div> -->
+</div>
+  <div class="sbx">
+    <!-- <input class="form-control hem-input" type="text" placeholder="Type search text here" [(ngModel)]='searchText'> -->
+    <!-- <i class="material-icons srch_icn pos-abs rtp">search</i> -->
+    <!-- <span class="tabs-appr" > -->
+    <!-- <mat-button-toggle-group name="fontStyle" aria-label="Font Style" id="as">
+        <mat-button-toggle matTooltip="Active" [checked]="GridView==1" (click)="getActive()">
+          Active</mat-button-toggle>
+        <mat-button-toggle matTooltip="Archive" [checked]="GridView==2"
+          (click)="getArchieved()">
+          Archived</mat-button-toggle>
+      </mat-button-toggle-group> -->
+    <!-- </span> -->
+
+    <span class="icn" *ngIf="isSortIconVis">
+      <i
+        class="material-icons reflect sort_icn pos-abs rtp"
+        *ngIf="isSort"
+        (click)="sortData(false)"
+        title="{{ isMgmt ? 'Sort A-Z' : 'Sort Ascending by Request Date' }}"
+        >sort</i
+      >
+      <i
+        class="material-icons sort_icn pos-abs rtp"
+        *ngIf="!isSort"
+        (click)="sortData(true)"
+        title="{{
+          isMgmt ? 'Sort Z-A' : 'Sort Descending by Request Date'
+        }}"
+        >sort</i
+      >
+      <i
+        class="material-icons leave_icn"
+        *ngIf="isManager && showIcon"
+        title="Approve Leave"
+        (click)="approveLeave()"
+      >
+        playlist_add_check
+      </i>
+    </span>
+  </div>
+</div>
+<div class="row shadow-grid main-border-radius gl-padding gl-margin">
+  
+  <div
+  class="no-data"
+  *ngIf="
+    (data == null || (rowslice != null && rowslice.length == 0)) &&
+    searchText == null
+  "
+>
+  <p>No Record Found</p>
+</div>
+
+<div
+  class="search_empty"
+  *ngIf="(rowslice | filter: searchText).length == 0 && searchText != null"
+>
+  <p>No Record Found</p>
+</div>
+  <div *ngIf="data != null && rowslice?.length > 0" class="hgt width-100">
+    <div class="all-lst">
+      <section class="lst-hdr">
+        <div class="row">
+          <div
+            class="flx-cl"
+            *ngFor="let header of data.header"
+            [ngClass]="{ 'col-reszie': (header.DisplayHead | gridColumnWidth) }"
+          >
+            <span class="hd-nm" (click)="SortByColumn(header)">
+              {{ header.DisplayHead }}
+              <i
+                class="material-icons"
+                *ngIf="selectedHeader == header.FieldName && !isHeaderSort"
+              >
+                arrow_drop_up
+              </i>
+              <i
+                class="material-icons"
+                *ngIf="selectedHeader == header.FieldName && isHeaderSort"
+              >
+                arrow_drop_down
+              </i>
+              <!-- default Arraw-->
+              <i
+                class="material-icons dflt"
+                *ngIf="selectedHeader != header.FieldName"
+              >
+                arrow_drop_up
+              </i>
+            </span>
+          </div>
+          <div class="flx-cl" *ngIf="showDelete || showAction">
+            <span class="hd-nm" style="text-align: right">Action</span>
+          </div>
+          <div class="flx-cl" *ngIf="viewDetail">
+            <span *ngIf="!userTracking" class="hd-nm" style="text-align: right"
+              >Action</span
+            >
+            <span *ngIf="userTracking" class="hd-nm" style="text-align: right"
+              >Details</span
+            >
+          </div>
+        </div>
+      </section>
+      <section class="lst-app cus_scrl full-height">
+        <!-- <div *ngIf="(rowslice | filter : searchText).length==0">Hello</div> -->
+        <div
+          class="row modernrow"
+          *ngFor="let row of rowslice | filter: searchText"
+        >
+          <span *ngIf="showChecked"
+            ><input
+              type="checkbox"
+              title="Select"
+              [checked]="row.is_checked"
+              (change)="value_changed($event, row)"
+              value="row"
+          /></span>
+
+          <div
+            class="flx-cl"
+            *ngFor="let property of data.header | keyvalue: originalOrder"
+            [ngClass]="{
+              'col-reszie': (property.value['DisplayHead'] | gridColumnWidth)
+            }"
+          >
+            <span
+              *ngIf="
+                property.value['Type'] == 'img' &&
+                row[property.value['FieldName']]
+              "
+            >
+              <img
+                src="{{ baseUrl }}{{ row[property.value['FieldName']] }}"
+                class="img-cls"
+              />
+            </span>
+            <span
+              title="{{
+                property.value['Type'] == 'phone'
+                  ? (row[property.value['FieldName']] | phone: 'US')
+                  : property.value['Type'] == 'email'
+                  ? row[property.value['FieldName']]
+                  : (row[property.value['FieldName']] | typeFilter)
+                  ? row[property.value['FieldName']]
+                  : (row[property.value['FieldName']] | titlecase)
+              }}"
+              *ngIf="property.value['Type'] == 'label'"
+            >
+              <ng-container
+                *ngIf="
+                  row[property.value['FieldName']] != null &&
+                    row[property.value['FieldName']] != '';
+                  else naView
+                "
+              >
+                {{
+                  property.value["Type"] == "phone"
+                    ? phoneFormat == 1
+                      ? (row[property.value["FieldName"]] | phone: "US")
+                      : (row[property.value["FieldName"]] | phone: "IN")
+                    : property.value["Type"] == "email"
+                    ? row[property.value["FieldName"]]
+                    : (row[property.value["FieldName"]] | typeFilter)
+                    ? row[property.value["FieldName"]]
+                    : (row[property.value["FieldName"]] | titlecase)
+                }}
+              </ng-container>
+              <ng-template #naView> N/A </ng-template>
+            </span>
+
+            <span
+              title="{{
+                property.value['Type'] == 'phone'
+                  ? (row[property.value['FieldName']] | phone: 'US')
+                  : property.value['Type'] == 'email'
+                  ? row[property.value['FieldName']]
+                  : (row[property.value['FieldName']] | typeFilter)
+                  ? row[property.value['FieldName']]
+                  : (row[property.value['FieldName']] | titlecase)
+              }}"
+              *ngIf="property.value['Type'] == 'email'"
+            >
+              <ng-container
+                *ngIf="
+                  row[property.value['FieldName']] != null &&
+                    row[property.value['FieldName']] != '';
+                  else naView
+                "
+              >
+                {{
+                  property.value["Type"] == "phone"
+                    ? phoneFormat == 1
+                      ? (row[property.value["FieldName"]] | phone: "US")
+                      : (row[property.value["FieldName"]] | phone: "IN")
+                    : property.value["Type"] == "email"
+                    ? row[property.value["FieldName"]]
+                    : (row[property.value["FieldName"]] | typeFilter)
+                    ? row[property.value["FieldName"]]
+                    : (row[property.value["FieldName"]] | titlecase)
+                }}
+              </ng-container>
+              <ng-template #naView> N/A </ng-template>
+            </span>
+
+            <span
+              title="{{
+                property.value['FieldName'] == 'PhoneNos'
+                  ? (row[property.value['FieldName']] | phone: 'US')
+                  : property.value['FieldName'] == 'Email'
+                  ? row[property.value['FieldName']]
+                  : (row[property.value['FieldName']] | typeFilter)
+                  ? row[property.value['FieldName']]
+                  : row[property.value['FieldName']]
+              }}"
+              *ngIf="property.value['Type'] == 'time'"
+            >
+              <ng-container
+                *ngIf="
+                  row[property.value['FieldName']] != null &&
+                    row[property.value['FieldName']] != '';
+                  else naView
+                "
+              >
+                {{
+                  property.value["Type"] == "phone"
+                    ? (row[property.value["FieldName"]] | phone: "US")
+                    : property.value["Type"] == "email"
+                    ? row[property.value["FieldName"]]
+                    : (row[property.value["FieldName"]] | typeFilter)
+                    ? row[property.value["FieldName"]]
+                    : row[property.value["FieldName"]]
+                }}
+              </ng-container>
+              <ng-template #naView> N/A </ng-template>
+            </span>
+            <span
+              title="{{ row[property.value['FieldName']] }}"
+              *ngIf="property.value['Type'] == 'labelNoTitleCase'"
+            >
+              <ng-container
+                *ngIf="
+                  row[property.value['FieldName']] != null &&
+                    row[property.value['FieldName']] != '';
+                  else naView
+                "
+              >
+                {{ row[property.value["FieldName"]] }}
+              </ng-container>
+              <ng-template #naView> N/A </ng-template>
+            </span>
+            <span
+              title="{{ row[property.value['FieldName']] }}"
+              *ngIf="property.value['Type'] == 'color'"
+            >
+              <ng-container
+                *ngIf="
+                  row[property.value['FieldName']] != null &&
+                    row[property.value['FieldName']] != '';
+                  else naView
+                "
+              >
+                <div
+                  class="color"
+                  [ngStyle]="{
+                    'background-color': row[property.value['FieldName']]
+                  }"
+                ></div>
+              </ng-container>
+              <ng-template #naView> N/A </ng-template>
+            </span>
+            <span
+              title="{{ row[property.value['FieldName']] }}"
+              *ngIf="property.value['Type'] == 'depend'"
+            >
+              <ng-container
+                *ngIf="
+                  row[property.value['FieldName']] != null &&
+                    row[property.value['FieldName']] != '';
+                  else naView
+                "
+              >
+                {{ row[property.value["FieldName"]] }}
+              </ng-container>
+              <ng-template #naView> N/A </ng-template>
+            </span>
+
+            <span
+              title="{{ row[property.value['FieldName']] }}"
+              *ngIf="property.value['Type'] == 'image'"
+            >
+              <ng-container
+                *ngIf="
+                  row[property.value['FieldName']] != null &&
+                    row[property.value['FieldName']] != '';
+                  else naView
+                "
+              >
+                <!-- {{(row[property.value['FieldName']])}} -->
+                <img
+                  src="https://udc.rigil.us/api/{{
+                    row[property.value['FieldName']]
+                  }}"
+                  height="30px"
+                />
+              </ng-container>
+              <ng-template #naView>
+                <img src="assets/images/placeholder-person.png" height="30px" />
+              </ng-template>
+            </span>
+
+            <span
+              title="{{ row[property.value['FieldName']] }}"
+              *ngIf="property.value['Type'] == 'leaveType'"
+            >
+              <ng-container
+                *ngIf="
+                  row[property.value['FieldName']] != null &&
+                    row[property.value['FieldName']] != '';
+                  else naView
+                "
+              >
+                {{ row.LeaveShortName }}
+              </ng-container>
+              <ng-template #naView> N/A </ng-template>
+            </span>
+
+            <span
+              title="{{ row[property.value['FieldName']] }}"
+              *ngIf="
+                property.value['Type'] == 'leave_type' &&
+                row[property.value['FieldName']] != 'Short'
+              "
+            >
+              {{
+                property.value["FieldName"] == "PhoneNos"
+                  ? (row[property.value["FieldName"]] | phone: "US")
+                  : property.value["FieldName"] == "Email"
+                  ? row[property.value["FieldName"]]
+                  : (row[property.value["FieldName"]] | typeFilter)
+                  ? row[property.value["FieldName"]] != null &&
+                    row[property.value["FieldName"]] != ""
+                    ? row[property.value["FieldName"]]
+                    : "N/A"
+                  : (row[property.value["FieldName"]] | titlecase)
+              }}
+              <!--for showing start time and end time-->
+              <ng-container
+                *ngIf="
+                  row.Leave_Duration_Type == 3 &&
+                  row[property.value['FieldName']] == 'Short'
+                "
+              >
+                <!-- ({{(row.start_time | date:'h:mm a')}}-{{(row.end_time| date:' h:mm a')}}) -->
+              </ng-container>
+            </span>
+
+            <span
+              title="{{ row[property.value['FieldName']] }}({{
+                row.start_time | date: 'h:mm a'
+              }}-{{ row.end_time | date: ' h:mm a' }})"
+              *ngIf="
+                property.value['Type'] == 'leave_type' &&
+                row[property.value['FieldName']] == 'Short'
+              "
+            >
+              {{
+                property.value["FieldName"] == "PhoneNos"
+                  ? (row[property.value["FieldName"]] | phone: "US")
+                  : property.value["FieldName"] == "Email"
+                  ? row[property.value["FieldName"]]
+                  : (row[property.value["FieldName"]] | typeFilter)
+                  ? row[property.value["FieldName"]]
+                  : (row[property.value["FieldName"]] | titlecase)
+              }}
+              <!--for showing start time and end time-->
+              <ng-container
+                *ngIf="
+                  row.Leave_Duration_Type == 3 &&
+                  row[property.value['FieldName']] == 'Short'
+                "
+              >
+                <!-- ({{(row.start_time | date:'h:mm a')}}-{{(row.end_time| date:' h:mm a')}}) -->
+              </ng-container>
+            </span>
+
+            <span
+              title="{{ row[property.value['FieldName']] | hoursMinut }}"
+              *ngIf="property.value['Type'] == 'hour'"
+              class="float-left"
+            >
+              {{ row.Leave_Hours | hoursMinut }}
+            </span>
+
+            <span
+              *ngIf="
+                property.value['Type'] == 'ref_label' &&
+                row.acknowledge_status == null
+              "
+              class="float-left"
+            >
+              <!-- {{(filterByName(data.reference,property.value['FieldName'],data.reference[0]['ValueField'], 5) | titlecase)}} -->
+              {{
+                filterByName(
+                  data.reference,
+                  property.value["FieldName"],
+                  data.reference[0]["ValueField"],
+                  row[property.value["FieldName"]]
+                ) | titlecase
+              }}
+            </span>
+
+            <!-- <span *ngIf="property.value['Type']=='ref_label' && row.acknowledge_status!=0" class="float-left">
+              {{(filterByName(data.reference,property.value['FieldName'],data.reference[0]['ValueField'],row[property.value['FieldName']]) | titlecase)}}
+            </span>
+            <span *ngIf="property.value['Type']=='ref_label' && row.acknowledge_status==0" class="float-left">
+              {{(filterByName(data.reference,property.value['FieldName'],data.reference[0]['ValueField'], 5) | titlecase)}}
+            </span> -->
+
+            <span
+              *ngIf="
+                property.value['Type'] == 'Time' &&
+                (row[property.value['FieldName']] | date: 'mediumDate') !=
+                  '01/01/1900'
+              "
+              class="float-left"
+            >
+              {{ row[property.value["FieldName"]] | date: "shortTime" }}
+            </span>
+            <span
+              *ngIf="
+                property.value['Type'] == 'date' &&
+                (row[property.value['FieldName']] | date: 'mediumDate') !=
+                  '01/01/1900'
+              "
+              class="float-left"
+            >
+              {{ row[property.value["FieldName"]] | date: "mediumDate" }}
+            </span>
+            <span *ngIf="property.value['Type'] == 'bool'" class="float-left">
+              {{ row[property.value["FieldName"]] | yesNo }}
+            </span>
+          </div>
+          <!-- {{ row[showViewColumn]}} -->
+          <!-- {{row.acknowledge_status}} -->
+          <!--View button-->
+          <div
+            class="flx-cl"
+            *ngIf="
+              showView &&
+                (row[showViewColumn] == 2 ||
+                  row[showViewColumn] == 3 ||
+                  row[showViewColumn] == 4);
+              else action
+            "
+          >
+            <span class="vl-nm link-style" style="text-align: right">
+              <i
+                class="material-icons eye"
+                (click)="cancelApprovedLeave(row)"
+                title="Cancel"
+                *ngIf="
+                  row[showViewColumn] == 2 &&
+                    (row.acknowledge_status == null ||
+                      row.acknowledge_status == 2 ||
+                      row.acknowledge_status == -1);
+                  else revokState
+                "
+              >
+                cancel
+              </i>
+
+              <ng-template #revokState>
+                <i
+                  class="material-icons eye"
+                  *ngIf="row[showViewColumn] == 2"
+                  (click)="revokeCancellarion(row)"
+                  title="Revoke"
+                  >settings_backup_restore</i
+                >
+              </ng-template>
+              <i
+                class="material-icons eye"
+                (click)="view(row[data.primaryKey])"
+                title="View"
+              >
+                remove_red_eye
+              </i>
+            </span>
+          </div>
+
+          <!--Edit/ Delete/ Archive button-->
+          <ng-template #action>
+            <div
+              class="flx-cl"
+              *ngIf="showView && row.acknowledge_status != null"
+            >
+              <span class="vl-nm link-style" style="text-align: right">
+                <i
+                  class="material-icons eye"
+                  (click)="revokeCancellarion(row)"
+                  title="Revoke"
+                  *ngIf="
+                    row[showViewColumn] == 1 && row.acknowledge_status == 0
+                  "
+                  >settings_backup_restore</i
+                >
+                <i
+                  class="material-icons eye"
+                  (click)="view(row[data.primaryKey])"
+                  title="View"
+                >
+                  remove_red_eye
+                </i>
+              </span>
+            </div>
+
+            <div
+              class="flx-cl"
+              *ngIf="!showArch && showAction && row.acknowledge_status == null"
+            >
+              <span class="vl-nm link-style" style="text-align: right">
+                <!-- <span class="vl-nm link-style" style="text-align: right;" *ngIf="showEmail"> -->
+                <i
+                  class="material-icons"
+                  (click)="sentEmail(row[data.primaryKey])"
+                  title="Send email"
+                  *ngIf="
+                    showEmail &&
+                    data.isEmailView &&
+                    (row['is_email_sent'] == null || !row['is_email_sent'])
+                  "
+                >
+                  email
+                </i>
+                <!-- </span> -->
+                <i
+                  class="material-icons"
+                  (click)="edit(row[data.primaryKey])"
+                  title="Edit"
+                >
+                  edit
+                </i>
+                <i
+                  class="material-icons"
+                  (click)="archiveData(row)"
+                  title="Delete"
+                  *ngIf="isDeleteType"
+                >
+                  delete
+                </i>
+                <i
+                  class="material-icons"
+                  (click)="downloadData(row)"
+                  title="Download"
+                  *ngIf="isDownloadType"
+                >
+                  delete
+                </i>
+                <i
+                  class="material-icons"
+                  (click)="archiveRowData(row[data.primaryKey])"
+                  title="Archive"
+                  *ngIf="!isDeleteType"
+                >
+                  delete_outline
+                </i>
+              </span>
+            </div>
+
+            <div
+              class="flx-cl"
+              *ngIf="showArch && showAction && row.acknowledge_status == null"
+            >
+              <span class="vl-nm link-style text-right">
+                <i
+                  class="material-icons"
+                  (click)="rest(row[data.primaryKey])"
+                  title="Restore"
+                >
+                  restore
+                </i>
+                <!-- below delete is for leave-type record to delete-->
+                <i
+                  class="material-icons"
+                  (click)="archiveData(row)"
+                  title="Delete"
+                  *ngIf="isDeleteType"
+                >
+                  delete
+                </i>
+              </span>
+            </div>
+
+            <div
+              class="flx-cl"
+              *ngIf="showDelete && row.acknowledge_status == null"
+            >
+              <span class="vl-nm link-style" style="text-align: right">
+                <i
+                  class="material-icons"
+                  (click)="del(row[data.primaryKey])"
+                  title="Delete"
+                >
+                  delete
+                </i>
+              </span>
+            </div>
+          </ng-template>
+        </div>
+      </section>
+      <div class="clearfix"></div>
+      <mat-paginator
+        [length]="row_length"
+        (page)="onPaginateChange($event)"
+        [pageSize]="10"
+        [pageSizeOptions]="[5, 10, 25, 100]"
+        showFirstLastButtons
+        id="paginator"
+      >
+      </mat-paginator>
+    </div>
+  </div>
+</div>

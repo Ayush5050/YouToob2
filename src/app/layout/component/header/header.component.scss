@@ -1,0 +1,76 @@
+@import '../../../scss/theme.scss';
+.navbar-hem{
+    justify-content: flex-end;
+    width: 100%;
+}
+section.dropdown {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 10px;
+}
+span.user-pic {
+    display: inline-block;
+    vertical-align: middle;
+    width: 22px;
+    height: 22px;
+    background: $subtag-color;
+    border-radius: 50%;
+}
+button{
+    outline: none;
+}
+button.btn-hem {
+    padding: 0px;
+    background: none;
+    color: #333;
+    border: none;
+    font-family: 'Poppins', sans-serif;
+    font-size: $font-size - .20;
+    font-weight: 500;
+    box-shadow: none;
+    letter-spacing: .5px;
+}
+
+i.notified {
+    width: 11px;
+    height: 11px;
+    position: absolute;
+    display: block;
+    background: #7f63f4;
+    top: 0.25rem;
+    border-radius: 50%;
+    right: 0.9rem;
+    border: solid 2px #fff;
+}
+a.nav-link {
+    position: relative;
+    padding: .35rem 1rem !important;
+    padding-bottom: 0px;
+}
+.dropdown-menu {
+   
+    right: -15px;
+    left: auto !important;
+}
+a.dropdown-item {
+    font-size: 0.785rem;
+    letter-spacing: .5px;
+}
+i.icon-srch {
+    position: absolute;
+    top: 0px;
+    font-size: 1.2rem;
+    background: #ced4da;
+    left: 0px;
+    z-index: 9;
+    width: 25px;
+    height: 100%;
+    border-radius: .25rem 0px 0px .25rem;
+    text-align: center;
+    padding-top: 10px;
+    color: lighten($font-color, 40%);
+}
+.hem-input{
+    padding-left: 30px;
+    font-size: $font-size - .15;
+}
