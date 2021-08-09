@@ -23,10 +23,12 @@ export class ServicesComponent implements OnInit {
   data$: BehaviorSubject<GridData> = new BehaviorSubject(new GridData());
   playlist = 
   [
-    {id: 1,name: "2018 top 10"}, 
-    {id: 2,name: "2017 top 10"},
-    {id: 3,name: "2016 top 10"},
-    {id: 4,name: "2015 top 10"}
+    {id: 1,name: "My Playlist"},
+    {id: 2,name: "WC 2019 Highlights"},
+    {id: 3,name: "2018 Top 10"}, 
+    {id: 4,name: "2017 Top 10"},
+    {id: 5,name: "2016 Top 10"},
+    {id: 6,name: "2015 Top 10"}
   ];
   selectedOption = 1;
   rowslice: any[];
