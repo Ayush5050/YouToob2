@@ -49,33 +49,7 @@ export class ServicesComponent implements OnInit {
 
   ngOnInit() {
     this.getSongs(this.yearSelected);
-    // this.inventoryList=[
-    //   {
-    //   id:0,
-    //   project_name:"EVM",
-    //   facilitator:"Ayush",
-    //   participants:"Ayush",
-    //   brainstorming:true,
-    //   nominal_group_technique:false,
-    //   interview:false,
-    //   pareto_analysis:false,
-    //   date:"01/01/1999",
-    //   isActive:false
-    //   },
-    //   {
-    //   id:1,
-    //   project_name:"CMMI",
-    //   facilitator:"Ayush1",
-    //   participants:"Ayush1",
-    //   brainstorming:true,
-    //   nominal_group_technique:false,
-    //   interview:false,
-    //   pareto_analysis:false,
-    //   date:"01/01/1999",
-    //   isActive:false
-    //   },
-    // ]
-    //this.setInventoryGrid(this.inventoryList);
+   
     this.ngOnChanges();
   }
   ngOnChanges() {
